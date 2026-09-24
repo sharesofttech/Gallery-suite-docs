@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery Suite — Documentation</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰ Menu</button>
+
+<div class="layout">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="brand-mark">GS</span>
+      <div>
+        <div class="brand-name">Gallery Suite</div>
+        <div class="brand-sub">Plugin documentation</div>
+      </div>
+    </div>
+
+    <nav>
+      <div class="nav-group">
+        <div class="nav-heading">Start here</div>
+        <a href="#overview" class="nav-link">Overview</a>
+        <a href="#install" class="nav-link">Installation</a>
+        <a href="#devices" class="nav-link">Desktop / Tablet / Mobile</a>
+        <a href="#how-it-works" class="nav-link">How it works</a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-heading">Settings reference</div>
+        <a href="#sec-01" class="nav-link"><span class="nav-num">01</span>Gallery &amp; Main Image</a>
+        <a href="#sec-02" class="nav-link"><span class="nav-num">02</span>Thumbnail Settings</a>
+        <a href="#sec-03" class="nav-link"><span class="nav-num">03</span>Navigation Arrows</a>
+        <a href="#sec-04" class="nav-link"><span class="nav-num">04</span>Zoom &amp; Magnifier</a>
+        <a href="#sec-05" class="nav-link"><span class="nav-num">05</span>Bullets / Dots</a>
+        <a href="#sec-06" class="nav-link"><span class="nav-num">06</span>Playback &amp; Interaction</a>
+        <a href="#sec-07" class="nav-link"><span class="nav-num">07</span>Lightbox</a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-heading">Reference</div>
+        <a href="#troubleshooting" class="nav-link">Troubleshooting</a>
+        <a href="#changelog" class="nav-link">Changelog</a>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="content">
+
+    <header class="page-head" id="overview">
+      <p class="eyebrow-plain">Gallery Suite for WooCommerce</p>
+      <h1>Configure the product gallery, without touching the theme</h1>
+      <p class="lead">
+        Gallery Suite replaces nothing — it takes over the existing WooCommerce product gallery
+        (the same <code>flex-viewport</code> / <code>flex-control-thumbs</code> markup your theme already
+        renders) and drives it with its own CSS and JavaScript, loaded late enough to win against
+        theme styles. Every visual and behavioural option is set independently for Desktop, Tablet
+        and Mobile, from one settings screen.
+      </p>
+      <div class="meta-row">
+        <span class="pill">WooCommerce compatible</span>
+        <span class="meta-item">Menu: <strong>Gallery Suite</strong> (top‑level admin menu)</span>
+        <span class="meta-item">Storage: single option <code>pgs_gallery_settings</code></span>
+      </div>
+    </header>
+
+    <section class="block" id="install">
+      <h2>Installation</h2>
+      <ol class="steps">
+        <li>Deactivate and remove any older/broken copy of the plugin first.</li>
+        <li>In <strong>WordPress → Plugins → Add New → Upload Plugin</strong>, upload the plugin ZIP.</li>
+        <li>Make sure <strong>WooCommerce</strong> is active, then activate Gallery Suite.</li>
+        <li>On activation the plugin writes sensible defaults for all three device profiles — nothing
+          breaks on a fresh install even before you open the settings screen.</li>
+        <li>Open <strong>Gallery Suite</strong> in the admin sidebar, adjust Desktop, Tablet and Mobile
+          as needed, and click <strong>Save Changes</strong> on each tab.</li>
+        <li>Visit any product page to see the gallery update. Settings only load on single product pages.</li>
+      </ol>
+    </section>
+
+    <section class="block" id="devices">
+      <h2>Desktop, Tablet and Mobile are independent</h2>
+      <p>
+        Every field on this page is stored three times — once per device profile — so a phone visitor
+        and a desktop visitor can see a completely different gallery layout, thumbnail size and zoom
+        behaviour from the same product. Switching tabs never discards unsaved values in the other tabs;
+        each tab saves and is sanitized on its own.
+      </p>
+
+      <div class="tabs" id="deviceTabs">
+        <button class="tab-btn is-active" data-tab="desktop">🖥 Desktop</button>
+        <button class="tab-btn" data-tab="tablet">▭ Tablet</button>
+        <button class="tab-btn" data-tab="mobile">📱 Mobile</button>
+      </div>
+
+      <div class="tab-panels">
+        <div class="tab-panel is-active" data-panel="desktop">
+          <img src="assets/img/settings-desktop.png" alt="Gallery Suite settings screen — Desktop tab" class="shot">
+        </div>
+        <div class="tab-panel" data-panel="tablet">
+          <img src="assets/img/settings-tablet.png" alt="Gallery Suite settings screen — Tablet tab" class="shot">
+        </div>
+        <div class="tab-panel" data-panel="mobile">
+          <img src="assets/img/settings-mobile.png" alt="Gallery Suite settings screen — Mobile tab" class="shot">
+        </div>
+      </div>
+
+      <p class="note">
+        <strong>Enable gallery</strong> (top-right toggle on each tab) turns Gallery Suite's control
+        off for that device range only — the theme's default WooCommerce gallery is left untouched
+        when it's off.
+      </p>
+    </section>
+
+    <section class="block" id="how-it-works">
+      <h2>How it works, in short</h2>
+      <div class="card-grid">
+        <div class="info-card">
+          <h3>No second gallery</h3>
+          <p>Gallery Suite does not print new markup. It reads the WooCommerce gallery already on the
+            page and re-styles/re-scripts it.</p>
+        </div>
+        <div class="info-card">
+          <h3>Forces theme support</h3>
+          <p>It force-enables <code>wc-product-gallery-zoom</code>, <code>-lightbox</code> and
+            <code>-slider</code> theme supports on <code>after_setup_theme</code>, so themes that never
+            declared gallery support still get the flexslider-style markup Gallery Suite needs.</p>
+        </div>
+        <div class="info-card">
+          <h3>Loads last, on purpose</h3>
+          <p>Frontend CSS/JS enqueue at priority <code>99</code>, after normal theme and WooCommerce
+            gallery assets, specifically so Gallery Suite's rules win without <code>!important</code> wars.</p>
+        </div>
+        <div class="info-card">
+          <h3>Fancybox for the lightbox</h3>
+          <p>The lightbox, counter and swipe gestures are powered by a bundled Fancybox instance,
+            captured early so a theme or another plugin can't hijack <code>window.Fancybox</code> later
+            in the page.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 01 GALLERY & MAIN IMAGE ============ -->
+    <section class="block section-block" id="sec-01">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <div>
+          <h2>Gallery &amp; Main Image</h2>
+          <p class="section-desc">Choose the gallery layout and define the main product image size and fit.</p>
+        </div>
+      </div>
+
+      <table class="settings-table">
+        <thead><tr><th>Setting</th><th>What it does</th><th>Options / range</th><th>Default</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Gallery layout</td>
+            <td>Where the thumbnail strip sits relative to the main image.</td>
+            <td>Horizontal Bottom · Horizontal Top · Vertical Left · Vertical Right · Thumbnails Only · No Thumbnails</td>
+            <td><code>Horizontal Bottom</code></td>
+          </tr>
+          <tr>
+            <td>Main image width</td>
+            <td>Width of the main image area.</td>
+            <td>Number, %</td>
+            <td><code>100%</code></td>
+          </tr>
+          <tr>
+            <td>Main image height</td>
+            <td>Fixed height of the main image area.</td>
+            <td>Number, px</td>
+            <td><code>360px</code></td>
+          </tr>
+          <tr>
+            <td>Object fit</td>
+            <td>How the image fills that box when its aspect ratio doesn't match.</td>
+            <td>Contain · Cover · Fill · None</td>
+            <td><code>Contain</code></td>
+          </tr>
+          <tr>
+            <td>Border radius</td>
+            <td>Rounds the corners of the main image.</td>
+            <td>Number, px</td>
+            <td><code>0</code></td>
+          </tr>
+          <tr>
+            <td>Border width</td>
+            <td>Border thickness around the main image.</td>
+            <td>Number, px</td>
+            <td><code>0</code></td>
+          </tr>
+          <tr>
+            <td>Slide type</td>
+            <td>Transition effect used when moving between images.</td>
+            <td>Fade · Slide · Flip</td>
+            <td><code>Fade</code></td>
+          </tr>
+          <tr>
+            <td>Slide speed</td>
+            <td>How long the transition animation takes.</td>
+            <td>Number, ms</td>
+            <td><code>450ms</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ============ 02 THUMBNAIL SETTINGS ============ -->
+    <section class="block section-block" id="sec-02">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <div>
+          <h2>Thumbnail Settings</h2>
+          <p class="section-desc">Control thumbnail size, shape, spacing, visibility and active‑state styling.</p>
+        </div>
+      </div>
+
+      <table class="settings-table">
+        <thead><tr><th>Setting</th><th>What it does</th><th>Options / range</th><th>Default</th></tr></thead>
+        <tbody>
+          <tr><td>Thumbnail width</td><td>Width of each thumbnail.</td><td>Number, px</td><td><code>58px</code></td></tr>
+          <tr><td>Thumbnail height</td><td>Height of each thumbnail.</td><td>Number, px</td><td><code>58px</code></td></tr>
+          <tr><td>Thumbnail gap</td><td>Spacing between thumbnails.</td><td>Number, px</td><td><code>8px</code></td></tr>
+          <tr><td>Thumbnail shape</td><td>Corner treatment applied to every thumbnail.</td><td>Square · Rounded · Circle</td><td><code>Square</code></td></tr>
+          <tr><td>Visible thumbnails</td><td>How many thumbnails show at once before the strip scrolls.</td><td>Number</td><td><code>4</code></td></tr>
+          <tr><td>Gallery layout</td><td>Shared with section 01 — same field, shown again here since it also drives thumbnail placement.</td><td>See section 01</td><td><code>Horizontal Bottom</code></td></tr>
+          <tr><td>Thumbnail border</td><td>Border colour on non‑active thumbnails.</td><td>Colour picker</td><td><code>#eb1f1f</code></td></tr>
+          <tr><td>Active thumbnail border</td><td>Border colour on the currently selected thumbnail.</td><td>Colour picker</td><td><code>#110101</code></td></tr>
+        </tbody>
+      </table>
+      <p class="note">The shipped defaults for the two border colours are a bright red and a near‑black — treat
+        them as placeholders to swap for your brand colours, not a deliberate design choice.</p>
+    </section>
+
+    <!-- ============ 03 NAVIGATION ARROWS ============ -->
+    <section class="block section-block" id="sec-03">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <div>
+          <h2>Navigation Arrows</h2>
+          <p class="section-desc">Style the previous and next controls and decide where they appear.</p>
+        </div>
+      </div>
+
+      <table class="settings-table">
+        <thead><tr><th>Setting</th><th>What it does</th><th>Options / range</th><th>Default</th></tr></thead>
+        <tbody>
+          <tr><td>Navigation arrows</td><td>Master on/off switch for the prev/next controls.</td><td>Toggle</td><td><code>On</code></td></tr>
+          <tr><td>Arrow style</td><td>Shape of the arrow button background.</td><td>Circle · Square · Minimal · None</td><td><code>Circle</code></td></tr>
+          <tr><td>Arrow color</td><td>Colour of the arrow icon/glyph.</td><td>Colour picker</td><td><code>#333333</code></td></tr>
+          <tr><td>Arrow background</td><td>Fill colour of the arrow button itself.</td><td>Colour picker</td><td><code>#ffffff</code></td></tr>
+          <tr><td>Arrow vertical position</td><td>Where the arrows sit vertically over the main image.</td><td>Top · Center · Bottom</td><td><code>Center</code></td></tr>
+          <tr><td>Arrow size</td><td>Diameter/size of the arrow buttons.</td><td>Number, px</td><td><code>36px</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ============ 04 ZOOM & MAGNIFIER ============ -->
+    <section class="block section-block" id="sec-04">
+      <div class="section-head">
+        <span class="section-num">04</span>
+        <div>
+          <h2>Zoom &amp; Magnifier</h2>
+          <p class="section-desc">Configure hover zoom, window zoom and lens behaviour.</p>
+        </div>
+      </div>
+
+      <table class="settings-table">
+        <thead><tr><th>Setting</th><th>What it does</th><th>Options / range</th><th>Default</th></tr></thead>
+        <tbody>
+          <tr><td>Zoom button</td><td>Master on/off switch for hover‑zoom.</td><td>Toggle</td><td><code>On</code></td></tr>
+          <tr>
+            <td>Hover zoom type</td>
+            <td>Which zoom interaction is used on hover.</td>
+            <td>
+              Inside Zoom (magnifies in place) · Window Zoom (opens a side panel) ·
+              Lens / Magnifier (draggable lens) · Cursor Follow · Disabled · Lightbox (legacy)
+            </td>
+            <td><code>Inside Zoom</code></td>
+          </tr>
+          <tr><td>Zoom level</td><td>Magnification multiplier.</td><td>Number, ×</td><td><code>2×</code></td></tr>
+          <tr><td>Zoom window width</td><td>Width of the zoomed preview panel (Window Zoom mode).</td><td>Number, px</td><td><code>420px</code></td></tr>
+          <tr><td>Zoom window height</td><td>Height of the zoomed preview panel.</td><td>Number, px</td><td><code>420px</code></td></tr>
+          <tr><td>Zoom window position</td><td>Where the preview panel is anchored relative to the main image.</td><td>Right · Left · Top · Bottom · Inside</td><td><code>Right</code></td></tr>
+          <tr><td>Zoom window gap</td><td>Space between the main image and the preview panel.</td><td>Number, px</td><td><code>15px</code></td></tr>
+          <tr><td>Lens width</td><td>Width of the magnifier lens (Lens mode).</td><td>Number, px</td><td><code>120px</code></td></tr>
+          <tr><td>Lens height</td><td>Height of the magnifier lens.</td><td>Number, px</td><td><code>120px</code></td></tr>
+          <tr><td>Lens shape</td><td>Outline shape of the lens.</td><td>Square · Circle</td><td><code>Square</code></td></tr>
+          <tr><td>Lens border width</td><td>Border thickness of the lens outline.</td><td>Number, px</td><td><code>1px</code></td></tr>
+          <tr><td>Lens border color</td><td>Border colour of the lens outline.</td><td>Colour picker</td><td><code>#ffffff</code></td></tr>
+          <tr><td>Zoom transition</td><td>Animation duration when the zoom engages/disengages.</td><td>Number, ms</td><td><code>150ms</code></td></tr>
+          <tr><td>Hover delay</td><td>Wait time before zoom activates after the cursor enters the image.</td><td>Number, ms</td><td><code>0ms</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ============ 05 BULLETS / DOTS ============ -->
+    <section class="block section-block" id="sec-05">
+      <div class="section-head">
+        <span class="section-num">05</span>
+        <div>
+          <h2>Bullets / Dots</h2>
+          <p class="section-desc">Customize slider bullets, position, alignment, spacing and colours.</p>
+        </div>
+      </div>
+
+      <table class="settings-table">
+        <thead><tr><th>Setting</th><th>What it does</th><th>Options / range</th><th>Default</th></tr></thead>
+        <tbody>
+          <tr><td>Dots / bullets</td><td>Master on/off switch for the dot indicators.</td><td>Toggle</td><td><code>Off</code></td></tr>
+          <tr><td>Dots position</td><td>Where the dot row sits relative to the main image.</td><td>Above image · Below image · Overlay top · Overlay bottom</td><td><code>Below image</code></td></tr>
+          <tr><td>Dots alignment</td><td>Horizontal alignment of the dot row.</td><td>Left · Center · Right</td><td><code>Center</code></td></tr>
+          <tr><td>Dot size</td><td>Diameter of each dot.</td><td>Number, px</td><td><code>8px</code></td></tr>
+          <tr><td>Dot gap</td><td>Spacing between dots.</td><td>Number, px</td><td><code>7px</code></td></tr>
+          <tr><td>Dot color</td><td>Colour of inactive dots.</td><td>Colour picker</td><td><code>#cccccc</code></td></tr>
+          <tr><td>Active dot color</td><td>Colour of the dot for the currently shown image.</td><td>Colour picker</td><td><code>#333333</code></td></tr>
+        </tbody>
+      </table>
+      <p class="note">Dots and the thumbnail strip can be enabled together — they aren't mutually exclusive.
+        With <strong>Thumbnails Only</strong> or <strong>No Thumbnails</strong> gallery layouts, dots are the
+        easiest visible way to show which slide is active.</p>
+    </section>
+
+    <!-- ============ 06 PLAYBACK & INTERACTION ============ -->
+    <section class="block section-block" id="sec-06">
+      <div class="section-head">
+        <span class="section-num">06</span>
+        <div>
+          <h2>Playback &amp; Interaction</h2>
+          <p class="section-desc">Manage autoplay, loop, touch gestures and transition timing.</p>
+        </div>
+      </div>
+
+      <table class="settings-table">
+        <thead><tr><th>Setting</th><th>What it does</th><th>Options / range</th><th>Default</th></tr></thead>
+        <tbody>
+          <tr><td>Autoplay</td><td>Automatically advances the gallery on a timer.</td><td>Toggle</td><td><code>Off</code></td></tr>
+          <tr><td>Autoplay speed</td><td>Delay between automatic slide changes. Uses a single restartable timer so transitions never overlap.</td><td>Number, ms</td><td><code>4000ms</code></td></tr>
+          <tr><td>Loop</td><td>Wraps from the last image back to the first (and vice‑versa) instead of stopping at the ends.</td><td>Toggle</td><td><code>On</code></td></tr>
+          <tr><td>Touch / swipe</td><td>Enables swipe gestures to move between images on touch devices.</td><td>Toggle</td><td><code>On</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ============ 07 LIGHTBOX ============ -->
+    <section class="block section-block" id="sec-07">
+      <div class="section-head">
+        <span class="section-num">07</span>
+        <div>
+          <h2>Lightbox</h2>
+          <p class="section-desc">Control the product image lightbox and its counter.</p>
+        </div>
+      </div>
+
+      <table class="settings-table">
+        <thead><tr><th>Setting</th><th>What it does</th><th>Options / range</th><th>Default</th></tr></thead>
+        <tbody>
+          <tr><td>Lightbox</td><td>Enables the full‑screen image viewer (powered by the bundled Fancybox) when the main image is clicked.</td><td>Toggle</td><td><code>On</code></td></tr>
+          <tr><td>Lightbox counter</td><td>Shows a "3 / 8" style counter inside the lightbox.</td><td>Toggle</td><td><code>On</code></td></tr>
+          <tr><td>Touch / swipe</td><td>Shared with section 06 — also controls swipe navigation inside the open lightbox.</td><td>See section 06</td><td><code>On</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="block" id="troubleshooting">
+      <h2>Troubleshooting</h2>
+      <div class="qa">
+        <div class="qa-item">
+          <h3>Gallery looks broken — no main image, thumbnails oversized and overlapping</h3>
+          <p>This is the exact symptom the plugin's <code>force_gallery_theme_support()</code> fix targets:
+            themes that never declared <code>wc-product-gallery-zoom</code> / <code>-lightbox</code> /
+            <code>-slider</code> support cause WooCommerce to skip its flexslider markup entirely. Confirm
+            you're on the current plugin version, then hard‑refresh the product page (theme/page caching
+            can serve the old markup).</p>
+        </div>
+        <div class="qa-item">
+          <h3>Settings changed but the frontend didn't update</h3>
+          <p>Frontend assets only enqueue on single product pages (<code>is_product()</code>). Check you're
+            viewing an actual product page, not the shop/category listing, and clear any page/object cache.</p>
+        </div>
+        <div class="qa-item">
+          <h3>I changed Tablet settings but Desktop also changed</h3>
+          <p>Each device tab is saved independently in <code>pgs_gallery_settings</code>. If both changed
+            together, check that a caching layer isn't serving a stale copy of one of the two profiles.</p>
+        </div>
+        <div class="qa-item">
+          <h3>Zoom / lightbox stopped working after adding another plugin</h3>
+          <p>Gallery Suite captures its own Fancybox instance as <code>window.PGS_Fancybox</code> the moment
+            its script loads, specifically so a later plugin overwriting <code>window.Fancybox</code> can't
+            break it. If it still breaks, the conflicting script is likely loading <em>before</em> Gallery
+            Suite's own assets — check load order/priority.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="changelog">
+      <h2>Changelog notes</h2>
+      <ul class="changelog">
+        <li>Theme‑independent WooCommerce gallery CSS overrides, replacing reliance on theme defaults.</li>
+        <li>Neutralized FlexSlider viewport/wrapper transforms and inline slide positioning that could
+          cause blank images mid‑navigation.</li>
+        <li>Stable thumbnail, arrow and dot controls now share a single navigation state.</li>
+        <li>Autoplay rebuilt on one restartable timer to stop overlapping transitions.</li>
+        <li>Frontend assets load at priority 99 so they reliably win over theme/WooCommerce gallery CSS.</li>
+      </ul>
+    </section>
+
+    <footer class="page-footer">
+      <p>Gallery Suite — internal plugin documentation.</p>
+    </footer>
+
+  </main>
+</div>
+
+<script src="assets/js/script.js"></script>
+</body>
+</html>
